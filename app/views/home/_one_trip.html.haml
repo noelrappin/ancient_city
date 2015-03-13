@@ -1,0 +1,10 @@
+.col-md-3.trip_entry[trip]
+  .trip_header= trip.link_to_trip_show_page
+  .trip_tag= trip.tag_line
+  .trip_dates= trip.date_range_display
+  .trip_image= trip.main_page_image_tag
+  .trip_price= trip.price_display
+  .trip_links
+    = link_to "Show Details", trip, :class => 'detail_toggle'
+    .detail_hidden
+      %div= trip.description
