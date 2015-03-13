@@ -1,0 +1,28 @@
+%h1= @trip.name
+
+%h2 Booking Options
+
+= form_for Order.new do |f|
+  .options
+
+    %h3 Hotel Options
+
+    .length_of_stay Number of nights
+    = hidden_field_tag :trip_id, @trip.id
+    = select_tag :length_of_stay,
+        options_for_select((1 .. (@trip.end_date - @trip.start_date)).to_a),
+        include_blank: true
+
+    - @trip.hotels.each do |hotel|
+      %div[hotel]
+        = radio_button_tag(:hotel_id, hotel.id, false)
+        = "#{hotel.name}: #{hotel.description} (#{number_to_currency(hotel.price)})"
+
+    %h3 Activity Options
+    - @trip.activities.each do |activity|
+      %div[activity]
+        = check_box_tag(:"activity_id[]", activity.id, false, id: "activity_id_#{activity.id}")
+        = "#{activity.name}: #{activity.description} (#{number_to_currency(activity.price)})"
+
+    %br
+  = f.submit "Order"
