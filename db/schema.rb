@@ -17,9 +17,9 @@ ActiveRecord::Schema.define(version: 20150313194555) do
     t.integer  "trip_id"
     t.string   "name"
     t.text     "description"
-    t.integer  "price_cents"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "price_cents", default: 0
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   add_index "activities", ["trip_id"], name: "index_activities_on_trip_id"
@@ -36,10 +36,10 @@ ActiveRecord::Schema.define(version: 20150313194555) do
     t.integer  "trip_id"
     t.string   "name"
     t.text     "description"
-    t.integer  "price_cents"
+    t.integer  "price_cents",   default: 0
     t.string   "remote_api_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   add_index "hotels", ["trip_id"], name: "index_hotels_on_trip_id"
@@ -49,18 +49,18 @@ ActiveRecord::Schema.define(version: 20150313194555) do
     t.integer  "buyable_id"
     t.string   "buyable_type"
     t.integer  "amount"
-    t.decimal  "unit_price",     precision: 10, scale: 2
-    t.decimal  "extended_price", precision: 10, scale: 2
-    t.decimal  "processing_fee", precision: 10, scale: 2
-    t.decimal  "price_paid",     precision: 10, scale: 2
+    t.integer  "unit_price_cents",     default: 0
+    t.integer  "extended_price_cents", default: 0
+    t.integer  "processing_fee_cents", default: 0
+    t.integer  "price_paid_cents",     default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "promo_code_id"
-    t.decimal  "discount",       precision: 10, scale: 2
+    t.integer  "discount_cents",       default: 0
   end
 
   create_table "orders", force: :cascade do |t|
-    t.decimal  "total_price_paid", precision: 10, scale: 2
+    t.integer  "total_price_paid_cents", default: 0
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"

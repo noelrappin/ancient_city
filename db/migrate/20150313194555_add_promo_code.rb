@@ -8,6 +8,6 @@ class AddPromoCode < ActiveRecord::Migration
     end
 
     add_column :order_line_items, :promo_code_id, :integer
-    add_column :order_line_items, :discount, :decimal, precision: 10, scale: 2
+    add_column :order_line_items, :discount_cents, :integer, default: 0
   end
 end

@@ -4,7 +4,7 @@ class CreateActivities < ActiveRecord::Migration
       t.references :trip, index: true
       t.string :name
       t.text :description
-      t.integer :price_cents
+      t.integer :price_cents, default: 0
 
       t.timestamps null: false
     end

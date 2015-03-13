@@ -1,7 +1,7 @@
 class AddOrder < ActiveRecord::Migration
   def change
     create_table :orders do |t|
-      t.decimal :total_price_paid, :precision => 10, :scale => 2
+      t.integer :total_price_paid_cents, default: 0
       t.references :user
       t.timestamps
     end
@@ -10,10 +10,10 @@ class AddOrder < ActiveRecord::Migration
       t.references :order
       t.references :buyable, polymorphic: true
       t.integer :amount
-      t.decimal :unit_price, :precision => 10, :scale => 2
-      t.decimal :extended_price, :precision => 10, :scale => 2
-      t.decimal :processing_fee, :precision => 10, :scale => 2
-      t.decimal :price_paid, :precision => 10, :scale => 2
+      t.integer :unit_price_cents, default: 0
+      t.integer :extended_price_cents, default: 0
+      t.integer :processing_fee_cents, default: 0
+      t.integer :price_paid_cents, default: 0
       t.timestamps
     end
   end
