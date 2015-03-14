@@ -35,12 +35,15 @@ describe "purchasing a trip" do
   end
 
   describe "basic process" do
-    it "creates order and line item objects" do
+    before(:each) do
       visit("/trips/#{mayflower.id}")
       select('4', :from => 'length_of_stay')
       choose("hotel_id_#{mayflower.hotels.first.id}")
       check("activity_id_#{mayflower.activities.first.id}")
       click_button("Order")
+    end
+
+    it "creates order and line item objects" do
       order = Order.last
       expect(order.order_line_items.count).to eq(3)
       expect(order.order_line_items.map(&:buyable)).to eq(
@@ -48,11 +51,6 @@ describe "purchasing a trip" do
     end
 
     it "correctly puts pricing in the line item objects" do
-      visit("/trips/#{mayflower.id}")
-      select('4', :from => 'length_of_stay')
-      choose("hotel_id_#{mayflower.hotels.first.id}")
-      check("activity_id_#{mayflower.activities.first.id}")
-      click_button("Order")
       order = Order.last
       expect(order.trip_item.unit_price).to eq(1200)
       expect(order.trip_item.amount).to eq(1)
@@ -63,7 +61,20 @@ describe "purchasing a trip" do
       expect(order.activity_items.first.unit_price).to eq(400)
       expect(order.activity_items.first.amount).to eq(1)
       expect(order.activity_items.first.extended_price).to eq(400)
-      expect(order.total_price_paid).to eq(3600)
+    end
+
+    it "correctly puts pricing in the activity line item objects" do
+      order = Order.last
+      activity = order.activity_items.first
+      expect(activity.unit_price).to eq(400)
+      expect(activity.amount).to eq(1)
+      expect(activity.extended_price).to eq(400)
+      expect(activity.processing_fee).to eq(5)
+    end
+
+    it "correctly puts pricing in the order object" do
+      order = Order.last
+      expect(order.total_price_paid).to eq(3600 + 3.95 + 10 + 5 + 10)
     end
   end
 
