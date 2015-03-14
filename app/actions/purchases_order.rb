@@ -2,13 +2,18 @@ class PurchasesOrder
 
   attr_accessor :length_of_stay
 
-  def initialize(trip_id, hotel_id, activity_ids, length_of_stay)
+  def initialize(trip_id, hotel_id, activity_ids, length_of_stay, code)
     @trip_id, @hotel_id, @activity_ids = trip_id, hotel_id, activity_ids
     @length_of_stay = length_of_stay
+    @code = code
   end
 
   def trip
     @trip ||= Trip.find(@trip_id)
+  end
+
+  def coupon_code
+    @coupon_code ||= CouponCode.find_by_code(@code)
   end
 
   def hotel
@@ -24,13 +29,8 @@ class PurchasesOrder
   end
 
   def add_line_item(buyable, unit_price, amount, calculator_class)
-    extended_price = amount * unit_price
-    processing_fee = calculator_class.new(buyable).fee
-    order.order_line_items.new(buyable: buyable,
-        unit_price: unit_price,
-        amount: amount, extended_price: extended_price,
-        processing_fee: processing_fee,
-        price_paid: extended_price + processing_fee)
+    OrderLineItemFactory.new(order, buyable, unit_price, amount, coupon_code,
+        calculator_class).run
   end
 
   def calculate_order_price

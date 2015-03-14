@@ -25,4 +25,7 @@
         = "#{activity.name}: #{activity.description} (#{number_to_currency(activity.price)})"
 
     %br
+
+    %h3 Coupon Code
+    = text_field_tag :coupon_code
   = f.submit "Order"
