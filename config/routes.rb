@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   root to: "home#index"
   resources :trips
   resources :orders
+  resources :users
 end
